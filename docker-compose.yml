@@ -1,0 +1,36 @@
+version: '3'
+services:
+  nginx:
+   container_name: blog-nginx
+   image: nginx:1.15.7-alpine
+   restart: always
+   ports:
+   - 80:80
+   - 443:443
+   volumes:
+   - ./nginx/conf.d:/etc/nginx/conf.d
+    
+  mysql:
+   container_name: blog-mysql
+   image: mysql:8.0.13
+   environment:
+    MYSQL_DATABASE: my_blog_db
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_ROOT_HOST: '%'
+   ports:
+   - "3306:3306"
+   restart: always
+    
+  app:
+    restart: always
+    build: ./My-Blog-master
+    working_dir: /My-Blog-master
+    volumes:
+      - ./My-Blog-master:/My-Blog-master
+      - ~/.m2:/root/.m2
+    expose:
+      - "8099"
+    depends_on:
+      - nginx
+      - mysql
+    command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
