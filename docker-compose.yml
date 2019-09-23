@@ -12,7 +12,7 @@ services:
     
   mysql:
    container_name: blog-mysql
-   image: mysql:5.5
+   image: mysql:8.0.13
    environment:
     MYSQL_DATABASE: my_blog_db
     MYSQL_ROOT_PASSWORD: root
